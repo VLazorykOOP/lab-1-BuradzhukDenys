@@ -63,6 +63,14 @@ void WriteArrayTextFile(int n, double *arr, const char *fileName )
     fout.close(); //
 }
 
+void WriteMaxNegativeInFile(double MaxNegative, const char *fileName)
+{
+    ofstream fout(fileName, ios::app);
+    if (fout.fail()) return;
+    fout << MaxNegative << endl;
+    fout.close(); //
+}
+
 //ReadArrayTextFile
 int ReadArrayTextFile(int n, pDouble &pA, const char* fileName)
 {
@@ -99,6 +107,14 @@ void WriteArrayBinFile(int n, double* arr, const char* fileName)
     bfout.write((const char*)&n, sizeof(int));
     std::streamsize  cn = static_cast<std::streamsize>(n) *sizeof(double);
     bfout.write((const char*)arr, cn);
+    bfout.close();
+}
+
+void WriteMaxNegativeBinFile(double MaxNegative, const char* fileName)
+{
+    ofstream bfout(fileName, ios_base::binary);
+    if (bfout.fail()) return;
+    bfout.write((const char*)&MaxNegative, sizeof(double));
     bfout.close();
 }
 
@@ -233,8 +249,175 @@ double Task1(int sizeMax)
     }
 }
 
+//Task2 (a,b,c,d)
 double Task2(int sizeMax)
 {
+    char ch;
+    double maxNegative = -1, T;
+    double Arr[MAX_SIZE];
+    pDouble A = nullptr;
+    vector<double> VectorA;
+    double *ptrCurr = nullptr;
+    ShowMenuInput();
+    cin.ignore();
+    ch = getchar();
+    switch (ch)
+    {
+    case '1':
+    {
+        system("cls");
+        int size = ConsoleInputArray(sizeMax, Arr);
+        cout << "Enter element T: ";
+        cin >> T;
+        ptrCurr = Arr;
+        bool FoundT = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (*ptrCurr == T)
+            {
+                FoundT = true;
+                break;
+            }
+            if (*ptrCurr < 0 && (maxNegative == -1 || *ptrCurr > maxNegative))
+            {
+                maxNegative = *ptrCurr;
+            }
+            ptrCurr++;
+        }
+        if (!FoundT)
+        {
+            cout << "Element T not found in the array." << endl;
+        }
+        WriteArrayTextFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+        if (maxNegative != -1)
+        {
+            WriteMaxNegativeInFile(maxNegative, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+        }
+        else
+        {
+            cout << "No negative elements in the array" << endl;
+        }
+        break;
+    }
+    case '2':
+    {
+        system("cls");
+        int size = RndInputArray(sizeMax, Arr);
+        cout << "Enter element T: ";
+        cin >> T;
+        ptrCurr = Arr;
+        bool FoundT = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (*ptrCurr == T)
+            {
+                FoundT = true;
+                break;
+            }
+            if (*ptrCurr < 0 && (maxNegative == -1 || *ptrCurr > maxNegative))
+            {
+                maxNegative = *ptrCurr;
+            }
+            ptrCurr++;
+        }
+        if (!FoundT)
+        {
+            cout << "Element T not found in the array." << endl;
+        }
+        WriteArrayBinFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.bin");
+        if (maxNegative != -1)
+        {
+            WriteMaxNegativeInFile(maxNegative, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.bin");
+        }
+        else
+        {
+            cout << "No negative elements in the array" << endl;
+        }
+        break;
+    }
+    case '3':
+    {
+        system("cls");
+        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+        cout << "Enter element T: ";
+        cin >> T;
+        ptrCurr = A;
+        bool FoundT = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (*ptrCurr == T)
+            {
+                FoundT = true;
+                break;
+            }
+            if (*ptrCurr < 0 && (maxNegative == -1 || *ptrCurr > maxNegative))
+            {
+                maxNegative = *ptrCurr;
+            }
+            ptrCurr++;
+        }
+        if (!FoundT)
+        {
+            cout << "Element T not found in the array." << endl;
+        }
+        WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+        if (maxNegative != -1)
+        {
+            WriteMaxNegativeInFile(maxNegative, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+            delete[] A;
+            break;
+        }
+        else
+        {
+            cout << "No negative elements in the array" << endl;
+            delete[] A;
+            break;
+        }
+    }
+    case '4':
+    {
+        int size = ReadVectorTextFile(sizeMax, VectorA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/MaxNegative.txt");
+        cout << "Enter element T: ";
+        cin >> T;
+        ptrCurr = &VectorA.front();
+        bool FoundT = false;
+        for (int i = 0; i < size; i++)
+        {
+            if (*ptrCurr == T)
+            {
+                FoundT = true;
+                break;
+            }
+            if (*ptrCurr < 0 && (maxNegative == -1 || *ptrCurr > maxNegative))
+            {
+                maxNegative = *ptrCurr;
+            }
+            ptrCurr++;
+        }
+        if (!FoundT)
+        {
+            cout << "Element T not found in the array." << endl;
+        }
+        for (int i = 0; i < VectorA.size(); i++)
+        {
+            cout << VectorA[i] << " ";
+        }
+        if (maxNegative != -1)
+        {
+            cout << "\nMax negative number - " << maxNegative << endl;
+        }
+        else
+        {
+            cout << "No negative elements in the array" << endl;
+        }
+        break;
+    }
+    case '5':
+        break;
+    default:
+        cout << "ERROR";
+        break;
+    }
 }
 
 double Task3(int sizeMax)
@@ -258,14 +441,3 @@ int main()
 { 
     TaskV();
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
