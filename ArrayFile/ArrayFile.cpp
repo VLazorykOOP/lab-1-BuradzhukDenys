@@ -9,6 +9,7 @@
 
 using namespace std;
 
+const int MAX_SIZE = 200;
 typedef double* pDouble;
 /*
 *   ConsoleInputArrayDouble
@@ -70,21 +71,10 @@ int RndInputArray(int sizeMax, double A[])
     return size;
 }
 
-int ConsoleInputDynamicArrayNew(int sizeMax, pDouble &pA)
+int ConsoleInputDynamicArray(int sizeMax, pDouble &pA)
 {
     int size = ConsoleInputSizeArray(sizeMax);
     pA = new double[size];
-    if (pA == nullptr) { return 0; }
-    for (int i = 0; i < size; i++) {
-        cout << " Array[ " << i << "] "; cin >> pA[i];
-    }
-    return size;
-}
-
-int ConsoleInputDynamicArray_calloc(int sizeMax, pDouble& pA)
-{
-    int size = ConsoleInputSizeArray(sizeMax);
-    pA = (double*)calloc(size, sizeof(double));      // pA = (double*)malloc(size * sizeof(double)); 
     if (pA == nullptr) { return 0; }
     for (int i = 0; i < size; i++) {
         cout << " Array[ " << i << "] "; cin >> pA[i];
@@ -172,141 +162,106 @@ int ReadArrayBinFile(int n, double* arr, const char* fileName)
     if (size > n) size = n;
     bfin.read((char*)arr, static_cast<std::streamsize>(size) * sizeof(double));
     bfin.close();
-    // ssdhs
     return size;
-}
-
-double Task1(int size, double A[])
-{
-    int sizeB = 0;
-    double B[sizeB];
-    for (int i = 0; i < size; i++)
-    {
-        if (A[i] < 0)
-        {
-            B[sizeB] = A[i];
-            sizeB++;
-        }
-    }
-    cout << "A: "; ConsoleOutputArray(size, A);
-    cout << "B: "; ConsoleOutputArray(sizeB, B);
-    ClearArrayTextFile("D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-    WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-    WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
 }
 
 void ShowMainMenu()
 {
+    system("cls");
     cout << "Main Menu\n";
     cout << "1.  Task 1\n";
     cout << "2.  Task 2\n";
     cout << "3.  Task 3\n";
 }
 
-void MenuTask()
+void ShowMenuInput()
 {
-    cout << "Menu Task\n";
-    cout << "1.  Local array\n";
-    cout << "2.  Dynamic array\n";
-    cout << "3.  Dynamic array: vector\n";
-    cout << "4.  Exit\n";
+    system("cls");
+    cout << "Menu Input\n";
+    cout << "1. Console array to file 1.txt\n";
+    cout << "2. Console size, random array to binary file 1.bin\n";
+    cout << "3. Dynamic array from .txt file to new .txt file and console\n";
+    cout << "4. Dynamic array(vector) from file to console\n";
+    cout << "5. Exit\n";
 }
 
 void MenuInput()
 {
-    cout << "Menu Input\n";
-    cout << "1. Console all\n";
-    cout << "2. Console - size, array - random\n";
-    cout << "3. File 1.txt\n";
-    cout << "4. bb\n";
-    cout << "5. Exit\n";
+
 }
 
-
-/*
-* Задано одновимірний масив А розміру 2N. 
-* Побудувати два масиви В і С розміру N, 
-* включивши  у масив В елементи масиву А з парними індексами,
-* а у С - з непарними.
-*****************
-*  A - in 
-*  B, C - out 
-*/
-void  TestVariant(int N, double* A, double* B, double* C) {
-    for (int i = 0; i < N; i++) {
-        B[i] = A[2 * i];
-        C[i] = A[2 * i + 1];
-    }
-}
-/*
-*  Task  Var
-* 
-* 
-*/
-void TaskV(int sizeMax, double Arr[])
+double Task1(int sizeMax, double Arr[])
 {
     char ch;
-    system("cls");
+    m1:
+    cin.ignore();
+    ShowMenuInput();
+    ch = getchar();
+    switch (ch)
+    {
+    case '1':
+    {
+        system("cls");
+        int size = ConsoleInputArray(sizeMax, Arr);
+        int sizeB = 0;
+        double B[sizeB];
+        for (int i = 0; i < size; i++)
+        {
+        if (Arr[i] < 0)
+        {
+            B[sizeB] = Arr[i];
+            sizeB++;
+        }
+        }
+        ClearArrayTextFile("D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        WriteArrayTextFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        getchar();
+        goto m1;
+        break;
+    }
+    case '2':
+        cout << "2";
+        break;
+    case '3':
+        cout << "3";
+        break;
+    case '4':
+        cout << "4";
+        break;
+    case '5':
+        break;
+    default:
+        cout << "ERROR";
+        break;
+    }
+}
+
+double Task2(int sizeMax, double A[])
+{
+}
+
+double Task3(int sizeMax, double A[])
+{
+}
+
+void TaskV(double Arr[])
+{
+    char ch;
     ShowMainMenu();
     ch = getchar();
     system("cls");
     switch (ch) {
-        case '1': Task1(ConsoleInputArray(sizeMax, Arr), Arr); break;
-        case '2': cout << " 2 "; break;
-        case '3': cout << "3"; break;
+        case '1': Task1(MAX_SIZE, Arr); break;
+        case '2': Task2(MAX_SIZE, Arr); break;
+        case '3': Task3(MAX_SIZE, Arr); break;
     }
 }
 
-void ArrayLocal()
-{
-    double A[1000], B[500], C[500];
-    int n;
-    char ch = '5';
-    do {
-        system("cls");
-        MenuTask();
-        ch = getchar();
-        getchar();
-        switch (ch) {
-        case '1': cout << " 1 "; break;
-        case '2': cout << " 2 "; break;
-            //
-        case '5': return;
-        }
-        cout << " Press any key and enter\n";
-        ch = getchar();
-    } while (ch != 27);
-
-}
-
-
 int main()
 { 
-    const int MAX_SIZE = 200;
-    // ShowMainMenu();
-    // double A[MAX_SIZE], B[MAX_SIZE],C[MAX_SIZE];
-    // int n,m;
-    // n = RndInputArray(MAX_SIZE, A);
-    // WriteArrayTextFile(n, A, "1.txt");
-    // m = ReadArrayTextFile(MAX_SIZE, B, "1.txt");
-    // cout << " \n m= " << m << endl;
-    // for (int i = 0; i < m; i++)
-    //     cout << B[i] << "   ";
-    // WriteArrayBinFile(n, A, "1.bin");
-    // m = ReadArrayBinFile(MAX_SIZE, C, "1.bin");
-    // cout << " \n m= " << m << endl;
-    // for (int i = 0; i < m; i++)
-    //     cout << C[i] << "   ";
-    // cout << "\n  Vector \n";
-    // vector<double> vA;
-    // ConsoleInputVector(MAX_SIZE, vA);
-    // for (auto v : vA) {
-    //     cout << v << "   ";
-    // }
-    // TaskV();
-    // return 1;
     double A[MAX_SIZE];
-    TaskV(MAX_SIZE, A);
+    TaskV(A);
     //ConsoleOutputArray(RndInputArray(MAX_SIZE, A), A);
 }
 
