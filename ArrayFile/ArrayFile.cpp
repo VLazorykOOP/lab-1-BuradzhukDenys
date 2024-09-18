@@ -11,10 +11,8 @@ using namespace std;
 
 const int MAX_SIZE = 200;
 typedef double* pDouble;
-/*
-*   ConsoleInputArrayDouble
-*   
-*/
+
+//ConsoleInputArrayDouble
 int ConsoleInputSizeArray(const int sizeMax)
 {
     int size = 0; 
@@ -24,10 +22,8 @@ int ConsoleInputSizeArray(const int sizeMax)
     } while (size <= 0 || size > sizeMax);
     return size;
 }
-/*
-*   ConsoleInputArrayDouble
-*
-*/
+
+//ConsoleInputArrayDouble
 int ConsoleInputArray(int sizeMax, double Arr[])
 {
     int size = ConsoleInputSizeArray(sizeMax);
@@ -39,23 +35,7 @@ int ConsoleInputArray(int sizeMax, double Arr[])
     return size;
 }
 
-/*
-*   ConsoleOutputArray
-*
-*/
-void ConsoleOutputArray(int size, double Arr[])
-{
-    for (int i = 0; i < size; i++)
-    {
-        cout << Arr[i] << " ";
-    }
-    cout << endl;
-}
-
-/*
-*   RndInputArrayDouble
-*
-*/
+//RndInputArrayDouble
 int RndInputArray(int sizeMax, double A[])
 {
     int size = ConsoleInputSizeArray(sizeMax);
@@ -71,11 +51,7 @@ int RndInputArray(int sizeMax, double A[])
     return size;
 }
 
-/*
-*  WriteArrayTextFile 
-*
-*/
-
+//WriteArrayTextFile 
 void WriteArrayTextFile(int n, double *arr, const char *fileName )
 {
     ofstream fout(fileName);
@@ -86,22 +62,18 @@ void WriteArrayTextFile(int n, double *arr, const char *fileName )
     fout << endl;
     fout.close(); //
 }
-/*
-*  ReadArrayTextFile
-*
-*/
 
-
+//ReadArrayTextFile
 int ReadArrayTextFile(int n, pDouble &pA, const char* fileName)
 {
     int size;
     ifstream fin(fileName);
     if (fin.fail()) return 0;
     fin >> size;
-    if (size <= 0) return 0;
-    if (size > n) size = n;   
+    if (size <= 0 || size > n) size = n;   
+    pA = new double[size];
     for (int i = 0; i < n; i++)
-       fin>> pA[i];
+       fin >> pA[i];
     fin.close();
     return size;
 }
@@ -112,17 +84,16 @@ int ReadVectorTextFile(int n, vector<double> &A, const char* fileName)
     ifstream fin(fileName);
     if (fin.fail()) return 0;
     fin >> size;
-    if (size <= 0) return 0;
-    if (size > n) size = n;   
+    if (size <= 0 || size > n) size = n;
+    A.resize(size);   
     for (int i = 0; i < n; i++)
-       fin>> A[i];
+       fin >> A[i];
     fin.close();
     return size;
 }
 
 void WriteArrayBinFile(int n, double* arr, const char* fileName)
 {
-    //ios_base
     ofstream bfout(fileName, ios_base::binary);
     if (bfout.fail()) return;
     bfout.write((const char*)&n, sizeof(int));
@@ -142,23 +113,6 @@ int ReadArrayBinFile(int n, double* arr, const char* fileName)
     bfin.read((char*)arr, static_cast<std::streamsize>(size) * sizeof(double));
     bfin.close();
     return size;
-}
-
-int FileInputDynamicArray(int sizeMax, pDouble &pA)
-{
-    int size = ReadArrayBinFile(sizeMax, pA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-    pA = new double[size];
-    return size;
-}
-
-void FileInputVector(int sizeMax, vector<double> &A)
-{
-    int size = ReadVectorTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-    for (int i = 0; i < size; i++)
-    {
-        cout << A[i] << " ";
-    }
-    return ;
 }
 
 void ShowMainMenu()
@@ -181,14 +135,17 @@ void ShowMenuInput()
     cout << "5. Exit\n";
 }
 
-double Task1(int sizeMax, double Arr[])
+//Task 1(a,b,c,d)
+double Task1(int sizeMax)
 {
     char ch;
-    pDouble A = new double[sizeMax];
-    pDouble B = new double[sizeMax];
-    vector<double> VectorArr[sizeMax];
+    double Arr[MAX_SIZE];
     int sizeB = 0;
     double B[sizeB];
+    pDouble A = nullptr;
+    pDouble DynamicB = nullptr;
+    vector<double> VectorA;
+    vector<double> VectorB;
     ShowMenuInput();
     cin.ignore();
     ch = getchar();
@@ -214,6 +171,7 @@ double Task1(int sizeMax, double Arr[])
     }
     case '2':
     {
+        system("cls");
         int size = RndInputArray(sizeMax, Arr);
         for (int i = 0; i < size; i++)
         {
@@ -230,26 +188,40 @@ double Task1(int sizeMax, double Arr[])
     }
     case '3':
     {
-        double* Arr1 = new double[6];
-        ReadArrayTextFile(sizeMax, Arr1, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-        cout << "Array A: ";
-        for (int i = 0; i < 6; i++)
+        system("cls");
+        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
+        DynamicB = new double[size];
+        for (int i = 0; i < size; i++)
         {
-            cout << Arr1 << " ";
+            if (A[i] < 0)
+            {
+                DynamicB[sizeB] = A[i];
+                sizeB++;
+            }
         }
-        cout << "\nArray B: ";
-        for (int i = 0; i < sizeB; i++)
-        {
-            cout << B[i] << " ";
-        }
+        WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/2.txt");
+        delete[] A;
+        delete[] DynamicB;
         break;
     }
     case '4':
     {
-        FileInputVector(sizeMax, VectorArr);
-        for (int i = 0; i < 4; i++)
+        int size = ReadVectorTextFile(sizeMax, VectorA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        for (int i = 0; i < size; i++)
         {
-            cout << VectorArr[i] << " ";
+            if (VectorA[i] < 0)
+            {
+                VectorB.push_back(VectorA[i]);
+            }
+        }
+        cout << "Vector A: ";
+        for (const auto& element : VectorA) {
+            std::cout << element << " ";
+        }
+        cout << "\nArray B with negative numbers: ";
+        for (const auto& element : VectorB) {
+            std::cout << element << " ";
         }
         break;
     }
@@ -261,37 +233,30 @@ double Task1(int sizeMax, double Arr[])
     }
 }
 
-double Task2(int sizeMax, double A[])
+double Task2(int sizeMax)
 {
 }
 
-double Task3(int sizeMax, double A[])
+double Task3(int sizeMax)
 {
 }
 
-void TaskV(double Arr[])
+void TaskV()
 {
     char ch;
     ShowMainMenu();
     ch = getchar();
     system("cls");
     switch (ch) {
-        case '1': Task1(MAX_SIZE, Arr); break;
-        case '2': Task2(MAX_SIZE, Arr); break;
-        case '3': Task3(MAX_SIZE, Arr); break;
+        case '1': Task1(MAX_SIZE); break;
+        case '2': Task2(MAX_SIZE); break;
+        case '3': Task3(MAX_SIZE); break;
     }
 }
 
 int main()
 { 
-    double A[MAX_SIZE];
-    TaskV(A);
-    //ConsoleOutputArray(RndInputArray(MAX_SIZE, A), A);
-    // ReadArrayTextFile(6, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-    // for (int i = 0; i < 6; i++)
-    // {
-    //     cout << A[i] << " ";
-    // }
+    TaskV();
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
