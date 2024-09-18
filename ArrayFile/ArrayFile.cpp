@@ -121,7 +121,6 @@ void ClearArrayTextFile(const char *fileName)
 
 void WriteArrayTextFile(int n, double *arr, const char *fileName )
 {
-    ClearArrayTextFile(fileName);
     ofstream fout(fileName, ios::app);
     if (fout.fail()) return;
     fout << "size: " << n << endl;
@@ -191,6 +190,7 @@ double Task1(int size, double A[])
     }
     cout << "A: "; ConsoleOutputArray(size, A);
     cout << "B: "; ConsoleOutputArray(sizeB, B);
+    ClearArrayTextFile("D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
     WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
     WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
 }
@@ -306,8 +306,8 @@ int main()
     // TaskV();
     // return 1;
     double A[MAX_SIZE];
-    //TaskV(MAX_SIZE, A);
-    ConsoleOutputArray(RndInputArray(MAX_SIZE, A), A);
+    TaskV(MAX_SIZE, A);
+    //ConsoleOutputArray(RndInputArray(MAX_SIZE, A), A);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
