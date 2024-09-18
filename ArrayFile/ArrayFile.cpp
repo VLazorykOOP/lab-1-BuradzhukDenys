@@ -71,6 +71,26 @@ void WriteMaxNegativeInFile(double MaxNegative, const char *fileName)
     fout.close(); //
 }
 
+void WriteArrayTextFileFiveElements(int n, double *arr, const char* fileName)
+{
+    ofstream fout(fileName);
+    int count = 0;
+    if (fout.fail()) return;
+    fout << n << endl;
+    for (int i = 0; i < n; i++)
+    {
+        if (count == 5)
+        {
+            fout << endl;
+            count = 0;
+        }
+        fout << arr[i] << " ";
+        count++;
+    }
+    fout << endl;
+    fout.close(); //
+}
+
 //ReadArrayTextFile
 int ReadArrayTextFile(int n, pDouble &pA, const char* fileName)
 {
@@ -152,7 +172,7 @@ void ShowMenuInput()
 }
 
 //Task 1(a,b,c,d)
-double Task1(int sizeMax)
+void Task1(int sizeMax)
 {
     char ch;
     double Arr[MAX_SIZE];
@@ -250,7 +270,7 @@ double Task1(int sizeMax)
 }
 
 //Task2 (a,b,c,d)
-double Task2(int sizeMax)
+void Task2(int sizeMax)
 {
     char ch;
     double maxNegative = -1, T;
@@ -420,8 +440,120 @@ double Task2(int sizeMax)
     }
 }
 
-double Task3(int sizeMax)
+void Task3(int sizeMax)
 {
+    char ch;
+    double Arr[MAX_SIZE];
+    int sizeB = 0;
+    double B[sizeB];
+    pDouble A = nullptr;
+    pDouble DynamicB = nullptr;
+    vector<double> VectorA;
+    vector<double> VectorB;
+    ShowMenuInput();
+    cin.ignore();
+    ch = getchar();
+    switch (ch)
+    {
+    case '1':
+    {
+        system("cls");
+        int size = ConsoleInputArray(sizeMax, Arr);
+        for (int i = 0; i < size; i++)
+        {
+            bool newNumber = false;
+            for (int j = i + 1; j < size; j++)
+            {
+                if (Arr[i] == Arr[j] && sizeB > 0)
+                {
+                    for (int k = 0; k < sizeB; k++)
+                    {
+                        if (Arr[i] == B[k])
+                        {
+                            newNumber = false;
+                            break;
+                        }
+                        else newNumber = true;
+                    }
+                    if (newNumber)
+                    {
+                        B[sizeB] = Arr[i];
+                        sizeB++;
+                    }
+                }
+                else if (Arr[i] == Arr[j] && sizeB == 0)
+                {
+                    B[sizeB] = Arr[i];
+                    sizeB++;
+                }
+            }
+        }
+        WriteArrayTextFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/Arr.txt");
+        WriteArrayTextFileFiveElements(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/B.txt");
+        cout << "Arrays A and B is recorded in a file";
+        break;
+    }
+    case '2':
+    {
+        system("cls");
+        int size = RndInputArray(sizeMax, Arr);
+        for (int i = 0; i < size; i++)
+        {
+            if (Arr[i] < 0)
+            {
+                B[sizeB] = Arr[i];
+                sizeB++;
+            }
+        }
+        WriteArrayBinFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
+        WriteArrayBinFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/2.bin");
+        break;
+    }
+    case '3':
+    {
+        system("cls");
+        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
+        DynamicB = new double[size];
+        for (int i = 0; i < size; i++)
+        {
+            if (A[i] < 0)
+            {
+                DynamicB[sizeB] = A[i];
+                sizeB++;
+            }
+        }
+        WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/2.txt");
+        delete[] A;
+        delete[] DynamicB;
+        break;
+    }
+    case '4':
+    {
+        int size = ReadVectorTextFile(sizeMax, VectorA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        for (int i = 0; i < size; i++)
+        {
+            if (VectorA[i] < 0)
+            {
+                VectorB.push_back(VectorA[i]);
+            }
+        }
+        cout << "Vector A: ";
+        for (const auto& element : VectorA) {
+            std::cout << element << " ";
+        }
+        cout << "\nArray B with negative numbers: ";
+        for (const auto& element : VectorB) {
+            std::cout << element << " ";
+        }
+        break;
+    }
+    case '5':
+        break;
+    default:
+        cout << "ERROR";
+        break;
+    }
 }
 
 void TaskV()
