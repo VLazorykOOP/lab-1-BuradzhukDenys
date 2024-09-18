@@ -1,5 +1,4 @@
 ﻿ // ArrayFile.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
 
 #include <iostream>
 #include <fstream>
@@ -19,22 +18,37 @@ int ConsoleInputSizeArray(const int sizeMax)
 {
     int size = 0; 
     do {
-        cout << " Input size Array ( 0< 1 < " << sizeMax << " ) ";
+        cout << "Input size Array ( 0 < size <= " << sizeMax << " ) ";
         cin >> size;
-    } while (size <= 0 || size >= sizeMax);
+    } while (size <= 0 || size > sizeMax);
     return size;
 }
 /*
 *   ConsoleInputArrayDouble
 *
 */
-int ConsoleInputArray(int sizeMax, double A[])
+int ConsoleInputArray(int sizeMax, double Arr[])
 {
     int size = ConsoleInputSizeArray(sizeMax);
-        for (int i = 0; i < size; i++) {
-        cout << " Array[ " << i << "] "; cin >> A[i];
-    }
+        for (int i = 0; i < size; i++) 
+        {
+            cout << "Array[" << i << "] ";
+            cin >> Arr[i];
+        }
     return size;
+}
+
+/*
+*   ConsoleOutputArray
+*
+*/
+void ConsoleOutputArray(int size, double Arr[])
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << Arr[i] << " ";
+    }
+    cout << endl;
 }
 
 /*
@@ -46,13 +60,12 @@ int RndInputArray(int sizeMax, double A[])
     int size = ConsoleInputSizeArray(sizeMax);
     int r1=0, r2=0;
     srand(size);
-
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
         r1 = rand();
         r2 = rand();
         A[i] = 100.0 * r1;
         A[i] = A[i] / (1.0 + r2);
-        cout << A[i] << "   ";
     }
     return size;
 }
@@ -95,13 +108,26 @@ void ConsoleInputVector(int sizeMax, vector<double> &A)
 *
 */
 
-void WriteArrayTextFile(int n, double *arr, const char *fileName )
+/*
+*   ClearArrayTextFile
+*
+*/
+
+void ClearArrayTextFile(const char *fileName)
 {
     ofstream fout(fileName);
+    fout.close();
+}
+
+void WriteArrayTextFile(int n, double *arr, const char *fileName )
+{
+    ClearArrayTextFile(fileName);
+    ofstream fout(fileName, ios::app);
     if (fout.fail()) return;
-    fout << n << endl;
+    fout << "size: " << n << endl;
     for (int i = 0; i < n; i++)
-        fout << arr[i] << "   ";
+        fout << arr[i] << " ";
+    fout << endl;
     fout.close(); //
 }
 /*
@@ -151,32 +177,49 @@ int ReadArrayBinFile(int n, double* arr, const char* fileName)
     return size;
 }
 
+double Task1(int size, double A[])
+{
+    int sizeB = 0;
+    double B[sizeB];
+    for (int i = 0; i < size; i++)
+    {
+        if (A[i] < 0)
+        {
+            B[sizeB] = A[i];
+            sizeB++;
+        }
+    }
+    cout << "A: "; ConsoleOutputArray(size, A);
+    cout << "B: "; ConsoleOutputArray(sizeB, B);
+    WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+    WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+}
+
 void ShowMainMenu()
 {
-    cout << "    Main Menu  \n";
-    cout << "    1.  Task 1  \n";
-    cout << "    2.  Task 2  \n";
-    cout << "    3.  Task 3  \n";
-  }
+    cout << "Main Menu\n";
+    cout << "1.  Task 1\n";
+    cout << "2.  Task 2\n";
+    cout << "3.  Task 3\n";
+}
 
 void MenuTask()
 {
-    cout << "     Menu Task   \n";
-    cout << "    1.  Local array  \n";
-    cout << "    2.  Dynamic array 1 \n";
-    cout << "    3.  Dynamic array 2  new \n"; 
-    cout << "    4.  Dynamic array : vector \n";
-    cout << "    5.  Exit \n";
+    cout << "Menu Task\n";
+    cout << "1.  Local array\n";
+    cout << "2.  Dynamic array\n";
+    cout << "3.  Dynamic array: vector\n";
+    cout << "4.  Exit\n";
 }
 
 void MenuInput()
 {
-    cout << "     Menu Input   \n";
-    cout << "    1.  Console all \n";
-    cout << "    2.  Console - size, array - random \n";
-    cout << "    3.  File 1.txt \n";
-    cout << "    4.  bb    \n";
-    cout << "    5.  Exit \n";
+    cout << "Menu Input\n";
+    cout << "1. Console all\n";
+    cout << "2. Console - size, array - random\n";
+    cout << "3. File 1.txt\n";
+    cout << "4. bb\n";
+    cout << "5. Exit\n";
 }
 
 
@@ -200,24 +243,18 @@ void  TestVariant(int N, double* A, double* B, double* C) {
 * 
 * 
 */
-void TaskV()
+void TaskV(int sizeMax, double Arr[])
 {
-    char ch = '5';
-    do {
-        system("cls");
-        MenuTask();
-        ch = getchar();
-        getchar();
-            switch (ch) {
-             case '1': cout << " 1 "; break;
-             case '2': cout << " 2 "; break;
-            //
-            case '5': return;
-            }
-        cout << " Press any key and enter\n";
-        ch = getchar();
-        } while (ch != 27);
-    
+    char ch;
+    system("cls");
+    ShowMainMenu();
+    ch = getchar();
+    system("cls");
+    switch (ch) {
+        case '1': Task1(ConsoleInputArray(sizeMax, Arr), Arr); break;
+        case '2': cout << " 2 "; break;
+        case '3': cout << "3"; break;
+    }
 }
 
 void ArrayLocal()
@@ -245,36 +282,32 @@ void ArrayLocal()
 
 int main()
 { 
-    
-    
-    
-    const int MAX_SIZE = 560;
-    std::cout << "Hello World!\n";
-    ShowMainMenu();
-    /*
-    double A[MAX_SIZE], B[MAX_SIZE],C[MAX_SIZE];
-    int n,m;
-    n = RndInputArray(MAX_SIZE, A);
-    WriteArrayTextFile(n, A, "1.txt");
-    m = ReadArrayTextFile(MAX_SIZE, B, "1.txt");
-    cout << " \n m= " << m << endl;
-    for (int i = 0; i < m; i++)
-        cout << B[i] << "   ";
-    WriteArrayBinFile(n, A, "1.bin");
-    m = ReadArrayBinFile(MAX_SIZE, C, "1.bin");
-    cout << " \n m= " << m << endl;
-    for (int i = 0; i < m; i++)
-        cout << C[i] << "   ";
-    cout << "\n  Vector \n";
-    vector<double> vA;
-    ConsoleInputVector(MAX_SIZE, vA);
-    for (auto v : vA) {
-        cout << v << "   ";
-    }
-*/
-    TaskV();
-    return 1;
-
+    const int MAX_SIZE = 200;
+    // ShowMainMenu();
+    // double A[MAX_SIZE], B[MAX_SIZE],C[MAX_SIZE];
+    // int n,m;
+    // n = RndInputArray(MAX_SIZE, A);
+    // WriteArrayTextFile(n, A, "1.txt");
+    // m = ReadArrayTextFile(MAX_SIZE, B, "1.txt");
+    // cout << " \n m= " << m << endl;
+    // for (int i = 0; i < m; i++)
+    //     cout << B[i] << "   ";
+    // WriteArrayBinFile(n, A, "1.bin");
+    // m = ReadArrayBinFile(MAX_SIZE, C, "1.bin");
+    // cout << " \n m= " << m << endl;
+    // for (int i = 0; i < m; i++)
+    //     cout << C[i] << "   ";
+    // cout << "\n  Vector \n";
+    // vector<double> vA;
+    // ConsoleInputVector(MAX_SIZE, vA);
+    // for (auto v : vA) {
+    //     cout << v << "   ";
+    // }
+    // TaskV();
+    // return 1;
+    double A[MAX_SIZE];
+    //TaskV(MAX_SIZE, A);
+    ConsoleOutputArray(RndInputArray(MAX_SIZE, A), A);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
