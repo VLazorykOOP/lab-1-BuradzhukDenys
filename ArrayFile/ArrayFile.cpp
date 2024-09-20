@@ -225,7 +225,7 @@ void Task1(int sizeMax)
     case '3':
     {
         system("cls");
-        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
+        int size = ReadArrayBinFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
         DynamicB = new double[size];
         for (int i = 0; i < size; i++)
         {
@@ -499,43 +499,105 @@ void Task3(int sizeMax)
         int size = RndInputArray(sizeMax, Arr);
         for (int i = 0; i < size; i++)
         {
-            if (Arr[i] < 0)
+            bool newNumber = false;
+            for (int j = i + 1; j < size; j++)
             {
-                B[sizeB] = Arr[i];
-                sizeB++;
+                if (Arr[i] == Arr[j] && sizeB > 0)
+                {
+                    for (int k = 0; k < sizeB; k++)
+                    {
+                        if (Arr[i] == B[k])
+                        {
+                            newNumber = false;
+                            break;
+                        }
+                        else newNumber = true;
+                    }
+                    if (newNumber)
+                    {
+                        B[sizeB] = Arr[i];
+                        sizeB++;
+                    }
+                }
+                else if (Arr[i] == Arr[j] && sizeB == 0)
+                {
+                    B[sizeB] = Arr[i];
+                    sizeB++;
+                }
             }
         }
-        WriteArrayBinFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
-        WriteArrayBinFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/2.bin");
+        WriteArrayBinFile(size, Arr, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/Arr.bin");
+        WriteArrayBinFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/B.bin");
         break;
     }
     case '3':
     {
         system("cls");
-        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.bin");
+        int size = ReadArrayTextFile(sizeMax, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/Arr.txt");
         DynamicB = new double[size];
         for (int i = 0; i < size; i++)
         {
-            if (A[i] < 0)
+            bool newNumber = false;
+            for (int j = i + 1; j < size; j++)
             {
-                DynamicB[sizeB] = A[i];
-                sizeB++;
+                if (Arr[i] == Arr[j] && sizeB > 0)
+                {
+                    for (int k = 0; k < sizeB; k++)
+                    {
+                        if (Arr[i] == DynamicB[k])
+                        {
+                            newNumber = false;
+                            break;
+                        }
+                        else newNumber = true;
+                    }
+                    if (newNumber)
+                    {
+                        DynamicB[sizeB] = Arr[i];
+                        sizeB++;
+                    }
+                }
+                else if (Arr[i] == Arr[j] && sizeB == 0)
+                {
+                    DynamicB[sizeB] = Arr[i];
+                    sizeB++;
+                }
             }
         }
-        WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
-        WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/2.txt");
+        WriteArrayTextFile(size, A, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/Arr.txt");
+        WriteArrayTextFile(sizeB, B, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/B.txt");
         delete[] A;
         delete[] DynamicB;
         break;
     }
     case '4':
     {
-        int size = ReadVectorTextFile(sizeMax, VectorA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/1.txt");
+        int size = ReadVectorTextFile(sizeMax, VectorA, "D:/Codes/Visual Code Codes/OOP/lab-1-BuradzhukDenys/Arr.txt");
         for (int i = 0; i < size; i++)
         {
-            if (VectorA[i] < 0)
+            bool newNumber = false;
+            for (int j = i + 1; j < size; j++)
             {
-                VectorB.push_back(VectorA[i]);
+                if (VectorA[i] == VectorA[j] && !VectorB.empty())
+                {
+                    for (int k = 0; k < VectorB.size(); k++)
+                    {
+                        if (VectorA[i] == VectorB[k])
+                        {
+                            newNumber = false;
+                            break;
+                        }
+                        else newNumber = true;
+                    }
+                    if (newNumber)
+                    {
+                        VectorB.push_back(VectorA[i]);
+                    }
+                }
+                else if (Arr[i] == Arr[j] && VectorB.empty())
+                {
+                    VectorB.push_back(VectorA[i]);
+                }
             }
         }
         cout << "Vector A: ";
